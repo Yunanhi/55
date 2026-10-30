@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>(주)SBK PCR 진단키트 품질관리 시스템</title>
+    <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #0b5ed7;
+            --dark-color: #212529;
+            --light-bg: #f8f9fa;
+            --border-color: #dee2e6;
+        }
+
+        body {
+            font-family: 'Pretendard', 'Noto Sans KR', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f6f9;
+            color: var(--dark-color);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .header {
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            margin: 0;
+            color: #1a365d;
+        }
+
+        /* Nav Tabs */
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            border: none;
+            background: none;
+            font-size: 16px;
+            font-weight: 600;
+            color: #6c757d;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom-color: var(--primary-color);
+        }
+
+        .tab-btn:hover {
+            color: var(--secondary-color);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Form Preview Cards Grid */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .form-card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            background: #fff;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .form-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+        }
+
+        .form-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            background-color: #e7f1ff;
+            color: #0c63e4;
+            font-size: 12px;
+            font-weight: bold;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .form-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin: 0 0 10px 0;
+            color: #2c3e50;
+        }
+
+        .form-info {
+            font-size: 13px;
+            color: #6c757d;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: background 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-outline {
+            background-color: white;
+            color: #495057;
+            border: 1px solid #ced4da;
+        }
+
+        .btn-outline:hover {
+            background-color: #e9ecef;
+        }
+
+        /* Modal Visual Previewer */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-container {
+            background: white;
+            width: 90%;
+            max-width: 850px;
+            max-height: 90vh;
+            border-radius: 8px;
+            overflow-y: auto;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            position: relative;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6c757d;
+        }
+
+        /* Paper Document Mockup Style */
+        .paper-doc {
+            background: #fff;
+            border: 1px solid #c0c0c0;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            font-size: 13px;
+            line-height: 1.4;
+            color: #000;
+        }
+
+        .doc-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .doc-table th, .doc-table td {
+            border: 1px solid #000;
+            padding: 6px 10px;
+            text-align: center;
+        }
+
+        .doc-table th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+
+        .approval-block {
+            float: right;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+        }
+
+        .approval-block td, .approval-block th {
+            border: 1px solid #000;
+            padding: 4px 8px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .clear {
+            clear: both;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>(주)SBK PCR 진단키트 품질관리 시스템</h1>
+        <span>체외진단의료기기 ISO 13485 / ISO 14971 표준규격 연계</span>
+    </div>
+
+    <!-- Navigation Tabs -->
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('sop-tab')">📋 품질절차서 (SOP)</button>
+        <button class="tab-btn" onclick="switchTab('forms-tab')">🖼️ 양식 미리보기 & 다운로드</button>
+    </div>
+
+    <!-- Tab 1: SOP Overview -->
+    <div id="sop-tab" class="tab-content active">
+        <h3>5대 핵심 품질 표준절차서 (SOP)</h3>
+        <p>첨부된 PCR 진단키트 품질관리 절차서를 선택하여 확인하실 수 있습니다.</p>
+        <ul>
+            <li><strong>QP-DOC-001 / sbk-401</strong>: 문서 관리 절차서</li>
+            <li><strong>SOP-RA-701</strong>: 세균성 식중독 및 장염 PCR 진단키트 위험관리 절차서</li>
+            <li><strong>sbk-401 (QC)</strong>: 시험 및 검사 절차서</li>
+            <li><strong>sbk-401 (TRACE)</strong>: 식별 및 추적관리 절차서</li>
+            <li><strong>sbk-401 (CAPA)</strong>: 시정조치 및 예방조치 절차서</li>
+        </ul>
+    </div>
+
+    <!-- Tab 2: Form Previews & Downloads -->
+    <div id="forms-tab" class="tab-content">
+        <h3>품질관리 표준 서식 및 양식 미리보기</h3>
+        <p>원하는 양식의 요약본 및 이미지 실물 서식을 미리 확인하고 양식을 바로 다운로드받으세요.</p>
+        
+        <div class="form-grid">
+            <!-- Form Card 1 -->
+            <div class="form-card">
+                <div>
+                    <span class="form-badge">문서관리</span>
+                    <h4 class="form-title">문서관리대장 (QF-DOC-001)</h4>
+                    <div class="form-info">
+                        • <strong>관리절차</strong>: QP-DOC-001 / sbk-401<br>
+                        • <strong>주요내용</strong>: 품질문서 등록, 개정상태, 유효여부 및 보관위치 추적기록
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-outline" onclick="openPreview('doc-001')">👁️ 이미지 미리보기</button>
+                    <button class="btn btn-primary" onclick="downloadForm('QF-DOC-001.pdf')">📥 다운로드</button>
+                </div>
+            </div>
+
+            <!-- Form Card 2 -->
+            <div class="form-card">
+                <div>
+                    <span class="form-badge">위험관리</span>
+                    <h4 class="form-title">제조공정 FMEA (QF-RA-701-03)</h4>
+                    <div class="form-info">
+                        • <strong>관리절차</strong>: SOP-RA-701 (ISO 14971)<br>
+                        • <strong>주요내용</strong>: 공정 단계별 잠재적 고장유형, S·O·D/RPN 평가 및 AFAP 저감조치
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-outline" onclick="openPreview('ra-003')">👁️ 이미지 미리보기</button>
+                    <button class="btn btn-primary" onclick="downloadForm('QF-RA-701-03.pdf')">📥 다운로드</button>
+                </div>
+            </div>
+
+            <!-- Form Card 3 -->
+            <div class="form-card">
+                <div>
+                    <span class="form-badge">시험검사</span>
+                    <h4 class="form-title">입고품 시험·검사 성적서 (QC-F-01)</h4>
+                    <div class="form-info">
+                        • <strong>관리절차</strong>: sbk-401 (시험 및 검사)<br>
+                        • <strong>주요내용</strong>: 시약·효소·프라이머 입고확인, AQL 샘플링검사, 결함판정
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-outline" onclick="openPreview('qc-001')">👁️ 이미지 미리보기</button>
+                    <button class="btn btn-primary" onclick="downloadForm('QC-F-01.pdf')">📥 다운로드</button>
+                </div>
+            </div>
+
+            <!-- Form Card 4 -->
+            <div class="form-card">
+                <div>
+                    <span class="form-badge">식별추적</span>
+                    <h4 class="form-title">완제품 출하/유통 대장 (QC-F-01)</h4>
+                    <div class="form-info">
+                        • <strong>관리절차</strong>: sbk-401 (식별 및 추적관리)<br>
+                        • <strong>주요내용</strong>: UDI-DI/PI, 제조Lot, 출하처, 인수확인 및 콜드체인 추적
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-outline" onclick="openPreview('trace-001')">👁️ 이미지 미리보기</button>
+                    <button class="btn btn-primary" onclick="downloadForm('QC-F-01_TRACE.pdf')">📥 다운로드</button>
+                </div>
+            </div>
+
+            <!-- Form Card 5 -->
+            <div class="form-card">
+                <div>
+                    <span class="form-badge">CAPA</span>
+                    <h4 class="form-title">CAPA 요구/보고서 (QF-CAPA-001)</h4>
+                    <div class="form-info">
+                        • <strong>관리절차</strong>: SOP-CAPA-01 / sbk-401<br>
+                        • <strong>주요내용</strong>: 부적합 근본원인 분석(5-Why/4M), 조치계획 수립 및 효과성 검증
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-outline" onclick="openPreview('capa-001')">👁️ 이미지 미리보기</button>
+                    <button class="btn btn-primary" onclick="downloadForm('QF-CAPA-001.pdf')">📥 다운로드</button>
+                </div>
+            </div>
+
+            <!-- Form Card 6 -->
+            <div class="form-card">
+                <div>
+                    <span class="form-badge">CAPA</span>
+                    <h4 class="form-title">CAPA 효과성 확인서 (QA-F-401-03)</h4>
+                    <div class="form-info">
+                        • <strong>관리절차</strong>: SOP-CAPA-01 / sbk-401<br>
+                        • <strong>주요내용</strong>: 관찰기간 동안 대조군 실패율, 재발 여부 및 최종 종결 승인
+                    </div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-outline" onclick="openPreview('capa-003')">👁️ 이미지 미리보기</button>
+                    <button class="btn btn-primary" onclick="downloadForm('QA-F-401-03.pdf')">📥 다운로드</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- Modal Document Image Viewer -->
+<div id="previewModal" class="modal-overlay">
+    <div class="modal-container">
+        <div class="modal-header">
+            <h3 id="modalTitle" style="margin: 0;">양식 서식 실물 미리보기</h3>
+            <button class="modal-close" onclick="closePreview()">&times;</button>
+        </div>
+        <div id="modalBody">
+            <!-- Dynamic Paper Document Rendered Here -->
+        </div>
+        <div class="btn-group" style="margin-top: 20px;">
+            <button class="btn btn-outline" onclick="closePreview()">닫기</button>
+            <button class="btn btn-primary" id="modalDownloadBtn">이 서식 양식 다운로드</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Tab switching function
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+        event.target.classList.add('active');
+        document.getElementById(tabId).classList.add('active');
+    }
+
+    // Modal Preview rendering templates
+    const templates = {
+        'doc-001': {
+            title: '문서관리대장 (QF-DOC-001)',
+            download: 'QF-DOC-001.pdf',
+            html: `
+                <div class="paper-doc">
+                    <table class="approval-block">
+                        <tr><th>작성</th><th>검토</th><th>승인</th></tr>
+                        <tr><td style="height:35px">홍길동</td><td>김철수</td><td>이영희</td></tr>
+                        <tr><td>26/10/23</td><td>26/10/24</td><td>26/10/25</td></tr>
+                    </table>
+                    <h2 style="text-align:center; margin-top:20px;">문 서 관 리 대 장</h2>
+                    <p style="text-align:right;">양식번호: QF-DOC-001 | 관리부서: 품질관리팀</p>
+                    <div class="clear"></div>
+                    <table class="doc-table">
+                        <tr>
+                            <th>관리번호</th><th>문서번호</th><th>문서명</th><th>개정번호</th><th>시행일자</th><th>보관위치</th><th>상태</th>
+                        </tr>
+                        <tr>
+                            <td>001</td><td>QP-DOC-001</td><td>문서관리 품질관리 절차서</td><td>Rev.0</td><td>2026.10.23</td><td>품질서고 A-1</td><td>유효</td>
+                        </tr>
+                        <tr>
+                            <td>002</td><td>SOP-RA-701</td><td>위험관리 절차서</td><td>Rev.0</td><td>2026.10.29</td><td>품질서고 A-2</td><td>유효</td>
+                        </tr>
+                        <tr>
+                            <td>003</td><td>sbk-401</td><td>시정 및 예방조치 절차서</td><td>Rev.1</td><td>2026.10.26</td><td>품질서고 B-1</td><td>유효</td>
+                        </tr>
+                    </table>
+                    <p style="font-size:11px; color:#555;">※ 관리 중인 품질문서의 제/개정 상태, 유효 여부 및 보관위치를 일자별로 기록하여 보존한다.</p>
+                </div>
+            `
+        },
+        'ra-003': {
+            title: '제조공정 FMEA 서식 (QF-RA-701-03)',
+            download: 'QF-RA-701-03.pdf',
+            html: `
+                <div class="paper-doc">
+                    <h3 style="text-align:center; margin:0;">제조공정 FMEA (QF-RA-701-03)</h3>
+                    <p style="text-align:center; font-size:11px;">제품명: 세균성 식중독 및 장염 PCR 진단키트 | 주관: 생산팀장 / QC·연구소 참여</p>
+                    <table class="doc-table" style="font-size:11px;">
+                        <tr>
+                            <th>ID</th><th>공정단계</th><th>잠재적 고장유형</th><th>S</th><th>O</th><th>D</th><th>RPN</th><th>판정</th><th>권고 조치사항</th><th>조치 후 RPN</th>
+                        </tr>
+                        <tr>
+                            <td>F-02</td><td>시약보관</td><td>냉동고 온도 이탈로 효소활성 저하</td><td>4</td><td>3</td><td>3</td><td>12</td><td><span style="color:red; font-weight:bold;">비수락</span></td><td>상시 온도 모니터링/알람, 백업 냉동고 설치</td><td>8 (AFAP)</td>
+                        </tr>
+                        <tr>
+                            <td>F-04</td><td>분주공정</td><td>분주량 오차로 인한 균일성 저하</td><td>3</td><td>4</td><td>3</td><td>12</td><td><span style="color:red; font-weight:bold;">비수락</span></td><td>시작/중간/종료 중량 검사, 분주기 PQ 교정</td><td>6 (AFAP)</td>
+                        </tr>
+                        <tr>
+                            <td>F-10</td><td>콜드체인</td><td>운송 중 온도 이탈로 효소 열화</td><td>5</td><td>3</td><td>4</td><td>20</td><td><span style="color:red; font-weight:bold;">비수락</span></td><td>운송 밸리데이션, 전 포장 온도지시계 적용</td><td>5 (AFAP)</td>
+                        </tr>
+                    </table>
+                </div>
+            `
+        },
+        'qc-001': {
+            title: '입고품 시험·검사 성적서 (QC-F-01)',
+            download: 'QC-F-01.pdf',
+            html: `
+                <div class="paper-doc">
+                    <table class="approval-block">
+                        <tr><th>검사자</th><th>검토/승인</th></tr>
+                        <tr><td style="height:30px">배시환 (인)</td><td>서정현 (인)</td></tr>
+                    </table>
+                    <h2 style="margin:0;">입고품 시험·검사 성적서</h2>
+                    <p>문서번호: QC-F-01 | 적용절차: sbk-401 입고품 시험 및 검사</p>
+                    <div class="clear"></div>
+                    <table class="doc-table">
+                        <tr><th>품명</th><td>Taq DNA Polymerase</td><th>LOT No.</th><td>RM261027-ENZ01</td></tr>
+                        <tr><th>공급업체</th><td>(주)바이오서플라이</td><th>입고일자</th><td>2026년 10월 27일</td></tr>
+                        <tr><th>검사방식</th><td>KS Q ISO 2859-1 샘플링검사</td><th>AQL</th><td>치명 0.10 / 중 0.65 / 경 2.5</td></tr>
+                    </table>
+                    <h4>시험 결과 및 판정</h4>
+                    <table class="doc-table">
+                        <tr><th>No</th><th>검사항목</th><th>검사기준</th><th>측정/확인값</th><th>판정</th></tr>
+                        <tr><td>1</td><td>외관 및 누액</td><td>파손 및 오염이 없을 것</td><td>이상 없음</td><td>적합</td></tr>
+                        <tr><td>2</td><td>효소 활성 시험</td><td>양성대조군 Ct ≤ 30.0</td><td>Ct 22.4 확인</td><td>적합</td></tr>
+                    </table>
+                    <p style="text-align:right; font-weight:bold; color:green;">[종합판정: 합격 (제조공정 사용 가능)]</p>
+                </div>
+            `
+        },
+        'capa-001': {
+            title: '시정조치 및 예방조치 요구/보고서 (QF-CAPA-001)',
+            download: 'QF-CAPA-001.pdf',
+            html: `
+                <div class="paper-doc">
+                    <h2 style="text-align:center;">시정조치 및 예방조치 요구/보고서 (CAPA)</h2>
+                    <p style="text-align:right;">서식번호: QF-CAPA-001 (Rev. 04) | 관련절차: SOP-CAPA-01</p>
+                    <table class="doc-table">
+                        <tr><th>CAPA 번호</th><td>sbk-CAPA-001</td><th>발행 구분</th><td>■ 시정조치  □ 예방조치</td></tr>
+                        <tr><th>발생 출처</th><td>완제품 검사 (양성대조군 실패)</td><th>대상 제품/Lot</th><td>PCR 진단키트 / LOT-EX-001~003</td></tr>
+                        <tr><th>부적합 내용</th><td colspan="3">완제품 검사에서 양성대조군 Ct 지연 및 증폭 실패가 3개 로트에서 확인됨.</td></tr>
+                        <tr><th>근본 원인 (5-Why)</th><td colspan="3">프라이머·프로브 믹스 보관 온도 모니터링 기준 미비로 인한 효소 열화.</td></tr>
+                        <tr><th>시정조치 계획</th><td colspan="3">① 냉동고 온도 상시 모니터링·알람 도입  ② 보관 SOP 개정  ③ 담당자 교육</td></tr>
+                    </table>
+                </div>
+            `
+        }
+    };
+
+    function openPreview(templateKey) {
+        const data = templates[templateKey] || templates['doc-001'];
+        document.getElementById('modalTitle').innerText = data.title;
+        document.getElementById('modalBody').innerHTML = data.html;
+        document.getElementById('modalDownloadBtn').onclick = function() {
+            downloadForm(data.download);
+        };
+        document.getElementById('previewModal').style.display = 'flex';
+    }
+
+    function closePreview() {
+        document.getElementById('previewModal').style.display = 'none';
+    }
+
+    function downloadForm(fileName) {
+        alert("선택하신 품질 서식 [" + fileName + "] 다운로드를 시작합니다.");
+    }
+</script>
+
+</body>
+</html>
